@@ -1,0 +1,195 @@
+# <p>Esta campo debe ser un autonumerico para que sea acomulativo</p>
+##
+
+# Create schemas
+
+# Create tables
+CREATE TABLE IF NOT EXISTS Usuario
+(
+    id INT NOT NULL,
+    email VARCHAR(45),
+    password VARCHAR(9),
+    usuario VARCHAR(45),
+    Fecha_nacimiento DATE,
+    Sexo CHARACTER(1),
+    Pais VARCHAR(45),
+    CD VARCHAR(5),
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE IF NOT EXISTS Video
+(
+    id INT NOT NULL,
+    Titulo VARCHAR(45),
+    Descripcion VARCHAR(80),
+    Grandaria DOUBLE,
+    Nombre_Archivo VARCHAR(45),
+    Duracion TIME,
+    Thumbnail BINARY(255),
+    N_reproducciones INT,
+    N_Likes INT,
+    N_dislikes INT,
+    Estados_id INT,
+    Etiqueta_id INT,
+    Publicado_por INT,
+    Fecha_Hora_Creacion DATETIME,
+    Dislike_id INT,
+    Like_id INT,
+    PRIMARY KEY(id)
+);
+
+# <p>Los videos puede ntener tres estados:</p>
+#
+#<p>publico, Oculto y privado</p>
+#
+CREATE TABLE IF NOT EXISTS Estados
+(
+    id INT NOT NULL,
+    Nombres VARCHAR(45),
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE IF NOT EXISTS Etiqueta
+(
+    id INT NOT NULL,
+    Nombre VARCHAR(45),
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE IF NOT EXISTS Canal
+(
+    id INT NOT NULL,
+    Nombre VARCHAR(45),
+    Descripcion VARCHAR(85),
+    Creacion DATETIME,
+    Creador INT,
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE IF NOT EXISTS Subcripciones
+(
+    id INT NOT NULL,
+    Canal_id INT,
+    subcriptor INT,
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE IF NOT EXISTS Like
+(
+    id INT NOT NULL,
+    Usuario_id INT,
+    Fecha_Hora DATETIME,
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE IF NOT EXISTS Dislike
+(
+    id INT NOT NULL,
+    Usuario_id INT,
+    Fecha_Hora DATETIME,
+    Video_Dislike INT,
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE IF NOT EXISTS PlayList
+(
+    id INT NOT NULL,
+    nombre VARCHAR(45),
+    Usuario_id INT,
+    Video_id INT,
+    Fecha_creacion DATETIME,
+    Estado VARCHAR(45),
+    Comentario_id INT,
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE IF NOT EXISTS Comentario
+(
+    id INT NOT NULL,
+    texto VARCHAR(80),
+    fecha DATETIME,
+    Like INT,
+    Dislike INT,
+    PRIMARY KEY(id)
+);
+
+
+# Create FKs
+ALTER TABLE Video
+    ADD    FOREIGN KEY (Estados_id)
+    REFERENCES Estados(id)
+;
+    
+ALTER TABLE Video
+    ADD    FOREIGN KEY (Etiqueta_id)
+    REFERENCES Etiqueta(id)
+;
+    
+ALTER TABLE Video
+    ADD    FOREIGN KEY (Publicado_por)
+    REFERENCES Usuario(id)
+;
+    
+ALTER TABLE Canal
+    ADD    FOREIGN KEY (Creador)
+    REFERENCES Usuario(id)
+;
+    
+ALTER TABLE Subcripciones
+    ADD    FOREIGN KEY (Canal_id)
+    REFERENCES Canal(id)
+;
+    
+ALTER TABLE Subcripciones
+    ADD    FOREIGN KEY (subcriptor)
+    REFERENCES Usuario(id)
+;
+    
+ALTER TABLE Like
+    ADD    FOREIGN KEY (Usuario_id)
+    REFERENCES Usuario(id)
+;
+    
+ALTER TABLE Dislike
+    ADD    FOREIGN KEY (Usuario_id)
+    REFERENCES Usuario(id)
+;
+    
+ALTER TABLE Video
+    ADD    FOREIGN KEY (Dislike_id)
+    REFERENCES Dislike(id)
+;
+    
+ALTER TABLE Video
+    ADD    FOREIGN KEY (Like_id)
+    REFERENCES Like(id)
+;
+    
+ALTER TABLE PlayList
+    ADD    FOREIGN KEY (Usuario_id)
+    REFERENCES Usuario(id)
+;
+    
+ALTER TABLE PlayList
+    ADD    FOREIGN KEY (Video_id)
+    REFERENCES Video(id)
+;
+    
+ALTER TABLE PlayList
+    ADD    FOREIGN KEY (Comentario_id)
+    REFERENCES Comentario(id)
+;
+    
+ALTER TABLE Comentario
+    ADD    FOREIGN KEY (Like)
+    REFERENCES Usuario(id)
+;
+    
+ALTER TABLE Comentario
+    ADD    FOREIGN KEY (Dislike)
+    REFERENCES Usuario(id)
+;
+    
+
+# Create Indexes
+
